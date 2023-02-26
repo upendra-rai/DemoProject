@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -28,6 +30,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@NamedQueries(value = { @NamedQuery(name = "User.findByName", query = "SELECT u from User u WHERE u.name= ?1") })
+
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

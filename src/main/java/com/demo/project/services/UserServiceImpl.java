@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.demo.project.dao.AddressDao;
 import com.demo.project.dao.ColorDao;
 import com.demo.project.dao.CompanyDao;
+import com.demo.project.dao.CustomerUserDao;
 import com.demo.project.dao.LaptopDao;
 import com.demo.project.dao.UserDao;
 import com.demo.project.models.Company;
@@ -27,6 +28,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private AddressDao addressDao;
 
+	@Autowired(required = false)
+	private CustomerUserDao customerUserDao;
+
 	@Override
 	public List<User> getLists() {
 		return userDao.findAll();
@@ -35,14 +39,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void saveData(User user) {
-		User saveUser=userDao.save(user);
-		user.getAddress().stream().forEach(add->{
-			Address address= new Address();
+		User saveUser = userDao.save(user);
+		user.getAddress().stream().forEach(add -> {
+			Address address = new Address();
 			address.setUser(saveUser);
 			address.setStreet(add.getStreet());
 			addressDao.save(address);
 		});
-		
+
 	}
 
 	@Override
@@ -50,6 +54,11 @@ public class UserServiceImpl implements UserService {
 	public void deleteById(Long id) {
 		User user = userDao.findById(id).orElseThrow(() -> new RuntimeException(" Id not Found"));
 		userDao.delete(user);
+	}
+
+	@Override
+	public List<User> getUsersByName(String name) {
+		return userDao.findByName(name);
 	}
 
 }

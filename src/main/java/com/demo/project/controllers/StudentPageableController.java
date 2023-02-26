@@ -37,6 +37,16 @@ public class StudentPageableController {
 	public ResponseEntity<PagedResponseDto<Student>> getLists(Pageable pageable) {
 		return ResponseEntity.ok(studentService.getLists(pageable));
 	}
+	
+	@GetMapping("/v1/api/predicate")
+	public ResponseEntity<List<String>> getPreducateList( ) {
+		return ResponseEntity.ok(studentService.getPreducateList());
+	}
+	
+	@GetMapping("/getSimpleList")
+	public ResponseEntity<List<String>> getSimpleList( ) {
+		return ResponseEntity.ok(studentService.getSimpleList());
+	}
 
 	@PostMapping
 	public ResponseEntity<Void> saveCompany(@RequestBody Student student) {

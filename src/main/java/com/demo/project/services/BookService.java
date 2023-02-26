@@ -1,6 +1,7 @@
 package com.demo.project.services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.demo.project.models.Book;
 import com.demo.project.models.Company;
@@ -19,4 +20,8 @@ public interface BookService {
 	public void deleteById(Long id);
 
 	public Book saveBatchData();
+
+	public Book saveCompanyOneData(Book book);
+
+	public Map<String, Object> getDataById(Long id);
 }

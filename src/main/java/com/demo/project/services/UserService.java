@@ -14,4 +14,6 @@ public interface UserService {
 	public void saveData(User laptop);
 	
 	public void deleteById(Long id);
+
+	public List<User> getUsersByName(String name);
 }

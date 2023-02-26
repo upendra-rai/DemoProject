@@ -17,4 +17,8 @@ public interface StudentService {
 	public void saveData(Student student);
 
 	public void deleteById(Long id);
+
+	public List<String> getSimpleList();
+
+	public List<String> getPreducateList();
 }

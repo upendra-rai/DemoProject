@@ -1,6 +1,7 @@
 package com.demo.project.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,17 @@ public class BulkBookController {
 	public ResponseEntity<List<Book>> getLists() {
 		return ResponseEntity.ok(bookService.getLists());
 	}
+	@PostMapping
+	public ResponseEntity<Book> saveCompanyOneData(@RequestBody Book book) {
+		return ResponseEntity.ok(bookService.saveCompanyOneData(book));
+	}
+	
+	@GetMapping("/{id}")
+	public Map<String, Object> getDataById(@PathVariable Long id) {
+		return bookService.getDataById(id);
+	}
+
+	
 
 	@PostMapping("/forloop")
 	public ResponseEntity<Book> saveCompany(@RequestBody Book book) {

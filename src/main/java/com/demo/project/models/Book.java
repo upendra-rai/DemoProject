@@ -7,9 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.Id;
 
@@ -24,8 +26,8 @@ import lombok.ToString;
 @ToString
 public class Book {
 	@Id
-	@GeneratedValue(generator="abc")
-	@GenericGenerator(name="abc",strategy="increment")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqGen")
+    @SequenceGenerator(name = "seqGen", sequenceName = "seq", initialValue = 1)
 	private Long id;
 
 	@Column(name = "name", nullable = false)

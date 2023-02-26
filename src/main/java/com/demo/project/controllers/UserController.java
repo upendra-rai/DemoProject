@@ -46,4 +46,9 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
+	@GetMapping("/{name}")
+	public List<User> getUsersByName(@PathVariable String name) {
+		return userService.getUsersByName(name);
+		
+	}
 }

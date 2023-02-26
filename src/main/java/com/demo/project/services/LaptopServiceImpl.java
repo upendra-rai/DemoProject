@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.demo.project.dao.ColorDao;
 import com.demo.project.dao.CompanyDao;
 import com.demo.project.dao.LaptopDao;
+import com.demo.project.enums.LaptopType;
 import com.demo.project.models.Company;
 import com.demo.project.one.to.many.bi.dir.models.Color;
 import com.demo.project.one.to.many.bi.dir.models.Laptop;
@@ -26,7 +27,7 @@ public class LaptopServiceImpl implements LaptopService {
 	public List<Laptop> getLists() {
 		return laptopDao.findAllData();
 	}
-	
+
 	@Override
 	public List<Color> getColorList() {
 		return colorDao.findAll();
@@ -35,10 +36,18 @@ public class LaptopServiceImpl implements LaptopService {
 	@Override
 	@Transactional
 	public void saveData(Laptop laptop) {
-		Color color=colorDao.save(laptop.getColor());
+		Color color = colorDao.save(laptop.getColor());
 		laptop.setColor(color);
+		if (laptop.getIsActive() != null) {
+			if (laptop.getIsActive().equals(Boolean.TRUE)) {
+				laptop.setStatus("Y");
+			} else {
+				laptop.setStatus("N");
+			}
+		}
+		laptop.setLaptopTypedata(LaptopType.COMMERCIAL.getValue());
+		laptop.setLaptopTypedata(LaptopType.STUDENT.getValue());
 		laptopDao.save(laptop);
-		
 	}
 
 	@Override
@@ -51,14 +60,13 @@ public class LaptopServiceImpl implements LaptopService {
 	@Transactional
 	public void updateData(Long id, Laptop laptop) {
 		Laptop saveLaptop = laptopDao.findById(id).orElseThrow(() -> new RuntimeException(" Id not found"));
-		Color saveColor = colorDao.findById(laptop.getId())
-				.orElseThrow(() -> new RuntimeException(" Id not found"));
+		Color saveColor = colorDao.findById(laptop.getId()).orElseThrow(() -> new RuntimeException(" Id not found"));
 		saveColor.setColor(laptop.getColor().getColor());
 		saveLaptop.setName(laptop.getName());
 		saveLaptop.setBrand(laptop.getBrand());
 		saveLaptop.setPrice(laptop.getPrice());
 		laptopDao.save(saveLaptop);
-		
+
 	}
 
 	@Override

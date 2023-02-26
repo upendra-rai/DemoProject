@@ -1,7 +1,9 @@
 package com.demo.project.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +34,13 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public PagedResponseDto<Student> getLists(Pageable pageable) {
-		 Page<Student>animalPage=studentDao.findAll(pageable);
-		 var pageDto=new PagedResponseDto<Student>();
-		 pageDto.setPage(animalPage.getNumber());
-		 pageDto.setPageSize(animalPage.getSize());
-		 pageDto.setTotalCount(animalPage.getTotalElements());
-		 pageDto.setList(animalPage.getContent().stream().collect(Collectors.toList()));
-			return pageDto;
+		Page<Student> animalPage = studentDao.findAll(pageable);
+		var pageDto = new PagedResponseDto<Student>();
+		pageDto.setPage(animalPage.getNumber());
+		pageDto.setPageSize(animalPage.getSize());
+		pageDto.setTotalCount(animalPage.getTotalElements());
+		pageDto.setList(animalPage.getContent().stream().collect(Collectors.toList()));
+		return pageDto;
 	}
 
 	@Override
@@ -52,6 +54,19 @@ public class StudentServiceImpl implements StudentService {
 	public void deleteById(Long id) {
 		Student student = studentDao.findById(id).orElseThrow(() -> new RuntimeException(" Id not Found"));
 		studentDao.delete(student);
+	}
+
+	@Override
+	public List<String> getSimpleList() {
+		return studentDao.findAllGroupBy();
+	}
+
+	@Override
+	public List<String> getPreducateList() {
+		List<Student> list = studentDao.findAll();
+		Predicate<Student> snn = name -> name.getStudentClass() != null;
+		List<Student> FinalName = list.stream().filter(snn).collect(Collectors.toList());
+		return FinalName.stream().map(Student::getName).collect(Collectors.toList());
 	}
 
 }
