@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,11 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private BookDao2 bookDao2;
 
+	private int totalObjects = 10000;
+
+	@Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
+	private int batchSize;
+
 	@Override
 	@Transactional
 	public Book saveData(Book book) {
@@ -49,37 +56,60 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	@Transactional
-	public Book updateData(Long id, Book book) {
-		Book book2 = null;
-		for (int i = 0; i <= 50000; i++) {
+	public List<Book> updateData() {
 
+		List<Book> books = IntStream.range(0, totalObjects)
+				.mapToObj(value -> Book.builder().name("Update Book " + value).author("Update Author" + value).build())
+				.collect(Collectors.toList());
+		
+		for (int i = 120052; i < 139990; i = i + batchSize) {
+			if (i + batchSize > 139990) {
+				List<Book> books1 = bookDao.findAllById(i);
+				bookDao.saveAll(books1);
+				break;
+			}
+			List<Book> books1 = books.subList(i, i + batchSize);
+			bookDao.saveAll(books1);
 		}
-		return book2;
+		return books;
 	}
 
 	@Override
 	@Transactional
 	public void deleteById(Long id) {
-		List<Book> deleteBook = new ArrayList<>();
-		for (long i = 0; i <= 50000; i++) {
-			Book book = bookDao.findById(i).orElseThrow(() -> new RuntimeException(" Id not Found"));
-			deleteBook.add(book);
+		List<Book>deleteBookList= new ArrayList<Book>();
+		for (int i = 120052; i < 139990; i = i + batchSize) {
+			if (i + batchSize >= 139990) {
+				List<Book> books = bookDao.findAllById(i);
+				deleteBookList.addAll(books);
+				break;
+			}
+			bookDao.deleteAll(deleteBookList);
 		}
-		bookDao.deleteAll(deleteBook);
+//		List<Book> deleteBook = new ArrayList<>();
+//		for (long i = 80052; i <= 120048; i++) {
+//			Book book = bookDao.findById(i).orElseThrow(() -> new RuntimeException(" Id not Found"));
+//			deleteBook.add(book);
+//		}
+//		bookDao.deleteAll(deleteBook);
 
 	}
 
 	@Override
-	public Book saveBatchData() {
-//		for (int i = 0; i < totalObjects; i = i + batchSize) {
-//		    if( i+ batchSize > totalObjects){
-//		        List<Book> books1 = books.subList(i, totalObjects - 1);
-//		        repository.saveAll(books1);
-//		        break;
-//		    }
-//		    List<Book> books1 = books.subList(i, i + batchSize);
-//		    repository.saveAll(books1);
-		return null;
+	public List<Book> saveBatchData() {
+		List<Book> books = IntStream.range(0, totalObjects)
+				.mapToObj(value -> Book.builder().name("Book " + value).author("Author" + value).build())
+				.collect(Collectors.toList());
+		for (int i = 0; i < totalObjects; i = i + batchSize) {
+			if (i + batchSize > totalObjects) {
+				List<Book> books1 = books.subList(i, totalObjects - 1);
+				bookDao.saveAll(books1);
+				break;
+			}
+			List<Book> books1 = books.subList(i, i + batchSize);
+			bookDao.saveAll(books1);
+		}
+		return books;
 	}
 
 	@Override

@@ -36,26 +36,30 @@ public class BulkBookController {
 	public ResponseEntity<List<Book>> getLists() {
 		return ResponseEntity.ok(bookService.getLists());
 	}
+
 	@PostMapping
 	public ResponseEntity<Book> saveCompanyOneData(@RequestBody Book book) {
 		return ResponseEntity.ok(bookService.saveCompanyOneData(book));
 	}
-	
+
 	@GetMapping("/{id}")
 	public Map<String, Object> getDataById(@PathVariable Long id) {
 		return bookService.getDataById(id);
 	}
 
-	
-
 	@PostMapping("/forloop")
 	public ResponseEntity<Book> saveCompany(@RequestBody Book book) {
 		return ResponseEntity.ok(bookService.saveData(book));
 	}
-	
+
 	@PostMapping("/batch/data")
-	public ResponseEntity<Book> saveBatchData( ) {
+	public ResponseEntity<List<Book>> saveBatchData() {
 		return ResponseEntity.ok(bookService.saveBatchData());
+	}
+
+	@PutMapping("/batch")
+	public ResponseEntity<List<Book>> updateData() {
+		return ResponseEntity.ok(bookService.updateData());
 	}
 
 	@DeleteMapping("/{id}")

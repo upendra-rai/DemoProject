@@ -15,11 +15,11 @@ public interface BookService {
 	
 	public Book saveData(Book book);
 	
-	public Book updateData(Long id,Book book);
+	public List<Book> updateData();
 	
 	public void deleteById(Long id);
 
-	public Book saveBatchData();
+	public List<Book> saveBatchData();
 
 	public Book saveCompanyOneData(Book book);
 

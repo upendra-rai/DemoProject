@@ -15,7 +15,10 @@ import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -23,17 +26,19 @@ import lombok.ToString;
 @Table(name = "book")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
+@Builder
 public class Book {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqGen")
-    @SequenceGenerator(name = "seqGen", sequenceName = "seq", initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqGen")
+	@SequenceGenerator(name = "seqGen", sequenceName = "seq", initialValue = 1)
 	private Long id;
 
 	@Column(name = "name", nullable = false)
 	private String name;
 
 	private String author;
-
 
 }

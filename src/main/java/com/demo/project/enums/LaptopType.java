@@ -22,10 +22,3 @@ public enum LaptopType {
 	    }
 	}
 
-//	public class TestConstants{
-//	    public static void main(String[] args){
-//	        System.out.println(Constants.YES.getResponse());
-//	        System.out.println(Constants.NO.getResponse());
-//	    }
-
-//}

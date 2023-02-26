@@ -13,4 +13,6 @@ import com.demo.project.one.to.many.bi.dir.models.Color;
 @Repository
 public interface BookDao extends JpaRepository<Book, Long> {
 
+	List<Book> findAllById(int i);
+
 }
